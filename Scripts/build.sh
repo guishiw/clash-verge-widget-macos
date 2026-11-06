@@ -70,9 +70,12 @@ xcrun swiftc \
 
 plutil -lint "$APP/Contents/Info.plist" "$APPEX/Contents/Info.plist"
 codesign --force --sign - \
+    --requirements '=designated => identifier "com.local.ClashVergeWidget.Extension"' \
     --entitlements "$PROJECT_DIR/Resources/Widget.entitlements" \
     "$APPEX"
-codesign --force --sign - "$APP"
+codesign --force --sign - \
+    --requirements '=designated => identifier "com.local.ClashVergeWidget"' \
+    "$APP"
 codesign --verify --deep --strict --verbose=2 "$APP"
 
 echo "$APP"

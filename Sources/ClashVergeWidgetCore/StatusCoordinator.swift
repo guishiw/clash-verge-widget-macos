@@ -5,7 +5,7 @@ public final class StatusCoordinator: @unchecked Sendable {
     private let profilesURL: URL
     private let vergeURL: URL
     private let proxyController: SystemProxyController
-    private let hotkeyController: any ClashVergeHotkeyDispatching
+    private let controlController: any ClashVergeControlDispatching
     private let statusProvider: (() -> WidgetStatus)?
     private let controlPollInterval: TimeInterval
     private let controlPollAttempts: Int
@@ -20,7 +20,7 @@ public final class StatusCoordinator: @unchecked Sendable {
         profilesURL = directory.appendingPathComponent("profiles.yaml")
         vergeURL = directory.appendingPathComponent("verge.yaml")
         self.proxyController = proxyController
-        hotkeyController = ClashVergeHotkeyController(configDirectory: directory)
+        controlController = ClashVergeAccessibilityController(configDirectory: directory)
         statusProvider = nil
         controlPollInterval = 0.1
         controlPollAttempts = 16
@@ -29,7 +29,7 @@ public final class StatusCoordinator: @unchecked Sendable {
     init(
         configDirectory: URL,
         proxyController: SystemProxyController = SystemProxyController(),
-        hotkeyController: any ClashVergeHotkeyDispatching,
+        controlController: any ClashVergeControlDispatching,
         statusProvider: @escaping () -> WidgetStatus,
         controlPollInterval: TimeInterval = 0,
         controlPollAttempts: Int = 8
@@ -38,7 +38,7 @@ public final class StatusCoordinator: @unchecked Sendable {
         profilesURL = configDirectory.appendingPathComponent("profiles.yaml")
         vergeURL = configDirectory.appendingPathComponent("verge.yaml")
         self.proxyController = proxyController
-        self.hotkeyController = hotkeyController
+        self.controlController = controlController
         self.statusProvider = statusProvider
         self.controlPollInterval = controlPollInterval
         self.controlPollAttempts = controlPollAttempts
@@ -93,7 +93,7 @@ public final class StatusCoordinator: @unchecked Sendable {
 
     public func setMode(_ mode: String) throws -> WidgetStatus {
         let normalized = mode.lowercased()
-        let action: ClashVergeHotkeyAction
+        let action: ClashVergeControlAction
         switch normalized {
         case "rule": action = .rule
         case "global": action = .global
@@ -103,7 +103,7 @@ public final class StatusCoordinator: @unchecked Sendable {
 
         let current = try requireOnlineStatus()
         if current.mode.caseInsensitiveCompare(normalized) == .orderedSame { return current }
-        try hotkeyController.trigger(action)
+        try controlController.trigger(action)
         return try waitForStatus("\(Self.modeLabel(normalized))模式") {
             $0.mode.caseInsensitiveCompare(normalized) == .orderedSame
         }
@@ -112,7 +112,7 @@ public final class StatusCoordinator: @unchecked Sendable {
     public func toggleSystemProxy() throws -> WidgetStatus {
         let current = try requireOnlineStatus()
         let expected = !(readVergeBool("enable_system_proxy") ?? current.systemProxyEnabled)
-        try hotkeyController.trigger(.systemProxy)
+        try controlController.trigger(.systemProxy)
         return try waitForStatus(expected ? "开启系统代理" : "关闭系统代理") {
             $0.systemProxyEnabled == expected && (self.readVergeBool("enable_system_proxy") ?? expected) == expected
         }
@@ -121,7 +121,7 @@ public final class StatusCoordinator: @unchecked Sendable {
     public func toggleTun() throws -> WidgetStatus {
         let current = try requireOnlineStatus()
         let expected = !current.tunEnabled
-        try hotkeyController.trigger(.tun)
+        try controlController.trigger(.tun)
         return try waitForStatus(expected ? "开启 TUN" : "关闭 TUN") {
             $0.tunEnabled == expected
         }

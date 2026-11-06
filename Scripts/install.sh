@@ -47,8 +47,4 @@ launchctl kickstart -k "gui/$(id -u)/com.local.ClashVergeWidget.host"
 "$LSREGISTER" -f "$DESTINATION_APP"
 pluginkit -a "$APPEX"
 
-if ! "$PROJECT_DIR/Scripts/check-hotkeys.sh"; then
-    echo "The widget was installed, but direct controls need the five Clash Verge shortcuts above." >&2
-fi
-
 echo "$DESTINATION_APP"
