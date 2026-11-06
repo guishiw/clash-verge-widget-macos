@@ -2,6 +2,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+[![CI](https://github.com/guishiw/clash-verge-widget-macos/actions/workflows/ci.yml/badge.svg)](https://github.com/guishiw/clash-verge-widget-macos/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/guishiw/clash-verge-widget-macos?include_prereleases)](https://github.com/guishiw/clash-verge-widget-macos/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 A native, draggable desktop widget for [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev) on macOS. Monitor live traffic and switch Rule, Global, Direct, System Proxy, and TUN without bringing the Clash Verge window to the front.
 
 <p align="center">
@@ -32,7 +36,13 @@ A native, draggable desktop widget for [Clash Verge Rev](https://github.com/clas
 
 Tested end-to-end with Clash Verge Rev 2.5.10 on macOS.
 
-## Quick Start
+## Download
+
+Download the latest Apple Silicon build from [GitHub Releases](https://github.com/guishiw/clash-verge-widget-macos/releases). The release ZIP includes the app, `Install.command`, `Uninstall.command`, installation notes, and the MIT License. Verify the asset against `SHA256SUMS.txt` before installing.
+
+This beta is ad-hoc signed and is not notarized by Apple. If macOS blocks the first launch, try opening the installed app once, then use **System Settings → Privacy & Security → Open Anyway**. Do not disable Gatekeeper globally. See [Apple's safety guidance](https://support.apple.com/en-sg/102445).
+
+## Build from Source
 
 ```bash
 git clone https://github.com/guishiw/clash-verge-widget-macos.git

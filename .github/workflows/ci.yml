@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Validate shell scripts
+        run: bash -n Scripts/*.sh
+
+      - name: Run tests
+        run: swift test
+
+      - name: Render production view preview
+        run: |
+          ./Scripts/preview.sh "$RUNNER_TEMP/widget-preview.png"
+          file "$RUNNER_TEMP/widget-preview.png"

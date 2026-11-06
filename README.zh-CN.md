@@ -2,6 +2,10 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+[![CI](https://github.com/guishiw/clash-verge-widget-macos/actions/workflows/ci.yml/badge.svg)](https://github.com/guishiw/clash-verge-widget-macos/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/guishiw/clash-verge-widget-macos?include_prereleases)](https://github.com/guishiw/clash-verge-widget-macos/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 一个适用于 [Clash Verge Rev](https://github.com/clash-verge-rev/clash-verge-rev) 的原生、可拖动 macOS 桌面小组件。无需把 Clash Verge 主窗口切到前台，即可查看实时流量并切换规则、全局、直连、系统代理和 TUN。
 
 <p align="center">
@@ -32,7 +36,13 @@
 
 已在 macOS 上配合 Clash Verge Rev 2.5.10 完成端到端实测。
 
-## 快速开始
+## 下载
+
+请从 [GitHub Releases](https://github.com/guishiw/clash-verge-widget-macos/releases) 下载最新的 Apple Silicon 构建。发布 ZIP 内含 App、`Install.command`、`Uninstall.command`、安装说明和 MIT License。安装前请使用 `SHA256SUMS.txt` 核对附件。
+
+此 Beta 使用临时签名，尚未经过 Apple 公证。如果 macOS 阻止首次启动，请先尝试打开一次已安装的 App，然后在 **系统设置 → 隐私与安全性** 中点击 **仍要打开**。无需全局关闭 Gatekeeper。可参考 [Apple 安全说明](https://support.apple.com/zh-cn/102445)。
+
+## 从源码构建
 
 ```bash
 git clone https://github.com/guishiw/clash-verge-widget-macos.git
