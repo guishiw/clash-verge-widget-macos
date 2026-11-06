@@ -20,7 +20,7 @@ public final class StatusCoordinator: @unchecked Sendable {
         profilesURL = directory.appendingPathComponent("profiles.yaml")
         vergeURL = directory.appendingPathComponent("verge.yaml")
         self.proxyController = proxyController
-        controlController = ClashVergeAccessibilityController(configDirectory: directory)
+        controlController = ClashVergeAccessibilityController()
         statusProvider = nil
         controlPollInterval = 0.1
         controlPollAttempts = 16

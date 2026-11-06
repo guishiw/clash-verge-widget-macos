@@ -4,39 +4,20 @@ import Testing
 
 @Suite("Clash Verge accessibility control")
 struct AccessibilityControlTests {
-    @Test("Matches Simplified Chinese, Traditional Chinese and English menu titles")
-    func matchesLocalizedMenuTitles() {
-        #expect(ClashVergeMenuTitles.titles(for: .rule).contains("规则模式"))
-        #expect(ClashVergeMenuTitles.titles(for: .rule).contains("規則模式"))
-        #expect(ClashVergeMenuTitles.titles(for: .global).contains("Global Mode"))
-        #expect(ClashVergeMenuTitles.titles(for: .systemProxy).contains("系統代理"))
-        #expect(ClashVergeMenuTitles.titles(for: .tun).contains("虛擬網路介面卡模式"))
+    @Test("Matches localized Clash Verge UI titles")
+    func matchesLocalizedUITitles() {
+        #expect(ClashVergeUITitles.titles(for: .rule).contains("规则"))
+        #expect(ClashVergeUITitles.titles(for: .rule).contains("規則"))
+        #expect(ClashVergeUITitles.titles(for: .global).contains("Global"))
+        #expect(ClashVergeUITitles.titles(for: .systemProxy).contains("系統代理"))
+        #expect(ClashVergeUITitles.titles(for: .tun).contains("虛擬網路介面卡模式"))
+        #expect(ClashVergeUITitles.normalized("虛 擬 網 路") == "虛擬網路")
     }
 
-    @Test("Dispatches through the native tray menu only when tray-menu mode is enabled")
-    func requiresTrayMenuMode() throws {
-        let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("ClashVergeWidgetAccessibility-\(UUID().uuidString)")
-        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
-
+    @Test("Dispatches control actions to the accessibility driver")
+    func dispatchesAccessibilityActions() throws {
         let driver = RecordingAccessibilityDriver()
-        let controller = ClashVergeAccessibilityController(configDirectory: directory, driver: driver)
-        try "tray_event: main_window\n".write(
-            to: directory.appendingPathComponent("verge.yaml"),
-            atomically: true,
-            encoding: .utf8
-        )
-        #expect(throws: ClashVergeControlError.trayMenuModeRequired) {
-            try controller.trigger(.global)
-        }
-        #expect(driver.actions.isEmpty)
-
-        try "tray_event: tray_menu\n".write(
-            to: directory.appendingPathComponent("verge.yaml"),
-            atomically: true,
-            encoding: .utf8
-        )
+        let controller = ClashVergeAccessibilityController(driver: driver)
         try controller.trigger(.global)
         #expect(driver.actions == [.global])
     }
